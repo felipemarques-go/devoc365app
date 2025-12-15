@@ -1,0 +1,33 @@
+import { Layout } from '@/components/layout/Layout';
+import { DevocionalCard } from '@/components/DevocionalCard';
+import { PremiumBanner } from '@/components/PremiumBanner';
+import { Button } from '@/components/ui/button';
+import { History } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+const Dashboard = () => {
+  const navigate = useNavigate();
+
+  return (
+    <Layout headerTitle="Devoc365">
+      <div className="py-4 space-y-6">
+        <DevocionalCard />
+        
+        <div className="px-4">
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => navigate('/historial')}
+          >
+            <History className="w-4 h-4" />
+            Ver devocionales anteriores
+          </Button>
+        </div>
+
+        <PremiumBanner />
+      </div>
+    </Layout>
+  );
+};
+
+export default Dashboard;
