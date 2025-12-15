@@ -1,11 +1,15 @@
 import { ChevronRight, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Devotional } from '@/data/mockData';
+import { Devocional365 } from '@/data/devocionales365';
 import { useApp } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
 
+interface HistorialDevocional extends Devocional365 {
+  fecha: string;
+}
+
 interface HistorialCardProps {
-  devotional: Devotional;
+  devotional: HistorialDevocional;
   index: number;
   locked?: boolean;
 }
