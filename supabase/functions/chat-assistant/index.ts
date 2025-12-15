@@ -29,13 +29,76 @@ Cuando el usuario pregunte por precio, pago o cómo acceder a todo el contenido,
 
 Mantén un tono respetuoso, cristiano, sin debates teológicos ni temas polémicos. Sé breve y directo, con mucha empatía. Limita tus respuestas a 2-3 párrafos máximo.`;
 
+const MAX_MESSAGE_LENGTH = 500;
+const MAX_MESSAGES = 20;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { messages } = await req.json();
+    const body = await req.json();
+    const { messages } = body;
+
+    // Validate messages array exists and is an array
+    if (!messages || !Array.isArray(messages)) {
+      console.error("Invalid request: messages must be an array");
+      return new Response(JSON.stringify({ error: "Formato de solicitud inválido" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Validate message count
+    if (messages.length === 0) {
+      return new Response(JSON.stringify({ error: "No se proporcionaron mensajes" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Validate and sanitize each message
+    const validatedMessages = [];
+    for (const msg of messages.slice(-MAX_MESSAGES)) {
+      if (!msg || typeof msg !== 'object') {
+        console.error("Invalid message format:", msg);
+        return new Response(JSON.stringify({ error: "Formato de mensaje inválido" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      if (!msg.role || !['user', 'assistant', 'system'].includes(msg.role)) {
+        console.error("Invalid message role:", msg.role);
+        return new Response(JSON.stringify({ error: "Rol de mensaje inválido" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      if (typeof msg.content !== 'string') {
+        console.error("Invalid message content type:", typeof msg.content);
+        return new Response(JSON.stringify({ error: "Contenido de mensaje inválido" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      if (msg.content.length > MAX_MESSAGE_LENGTH) {
+        console.error("Message too long:", msg.content.length);
+        return new Response(JSON.stringify({ error: `Mensaje demasiado largo. Máximo ${MAX_MESSAGE_LENGTH} caracteres.` }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      validatedMessages.push({
+        role: msg.role,
+        content: msg.content.trim()
+      });
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
@@ -52,7 +115,7 @@ serve(async (req) => {
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
-          ...messages,
+          ...validatedMessages,
         ],
         stream: true,
       }),
