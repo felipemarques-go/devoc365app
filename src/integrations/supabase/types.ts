@@ -14,13 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          dias_completados: number
+          email: string
+          id: string
+          mejor_streak: number
+          meta_dias: number
+          nombre: string | null
+          streak_actual: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dias_completados?: number
+          email: string
+          id: string
+          mejor_streak?: number
+          meta_dias?: number
+          nombre?: string | null
+          streak_actual?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dias_completados?: number
+          email?: string
+          id?: string
+          mejor_streak?: number
+          meta_dias?: number
+          nombre?: string | null
+          streak_actual?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_subscriptions: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          subscription_id: string | null
+          subscription_status: string | null
+          tipo_acceso: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          subscription_id?: string | null
+          subscription_status?: string | null
+          tipo_acceso?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          subscription_id?: string | null
+          subscription_status?: string | null
+          tipo_acceso?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_premium_user: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never

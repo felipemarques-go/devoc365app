@@ -1,13 +1,39 @@
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { useApp } from '@/context/AppContext';
+import { useAuth } from '@/hooks/useAuth';
 import { HOTMART_PREMIUM_URL } from '@/data/mockData';
-import { User, Flame, Target, Trophy, Sparkles, ExternalLink } from 'lucide-react';
+import { User, Flame, Target, Trophy, Sparkles, ExternalLink, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 
 const Perfil = () => {
   const { usuario, setUsuario } = useApp();
+  const { signOut, user } = useAuth();
+  const navigate = useNavigate();
 
   const metas = [7, 14, 21, 30, 60, 90];
+
+  const handleMetaChange = async (meta: number) => {
+    setUsuario(prev => ({ ...prev, metaDias: meta }));
+    
+    // Update in database
+    if (user) {
+      try {
+        await supabase
+          .from('profiles')
+          .update({ meta_dias: meta })
+          .eq('id', user.id);
+      } catch (err) {
+        console.error('Error updating meta:', err);
+      }
+    }
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/', { replace: true });
+  };
 
   return (
     <Layout headerTitle="Perfil">
@@ -18,7 +44,7 @@ const Perfil = () => {
             <User className="w-10 h-10 text-primary-foreground" />
           </div>
           <h1 className="font-serif text-2xl font-semibold text-foreground">
-            ¡Hola, {usuario.nombre}!
+            ¡Hola, {usuario.nombre || 'Usuario'}!
           </h1>
           <p className="text-sm text-muted-foreground mt-1">{usuario.email}</p>
           
@@ -66,7 +92,7 @@ const Perfil = () => {
             {metas.map(meta => (
               <button
                 key={meta}
-                onClick={() => setUsuario(prev => ({ ...prev, metaDias: meta }))}
+                onClick={() => handleMetaChange(meta)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                   usuario.metaDias === meta
                     ? 'bg-primary text-primary-foreground shadow-soft'
@@ -101,6 +127,16 @@ const Perfil = () => {
         >
           <ExternalLink className="w-4 h-4" />
           Gestionar mi suscripción
+        </Button>
+
+        {/* Sign out */}
+        <Button 
+          variant="ghost" 
+          className="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
+          onClick={handleSignOut}
+        >
+          <LogOut className="w-4 h-4" />
+          Cerrar sesión
         </Button>
       </div>
     </Layout>
