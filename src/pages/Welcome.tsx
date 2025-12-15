@@ -1,15 +1,24 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sun, BookOpen, Heart } from 'lucide-react';
+import { Sun, BookOpen, Heart, LogIn } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const { user, isLoading } = useAuth();
   const [isAnimating, setIsAnimating] = useState(false);
+
+  // Redirect to dashboard if already logged in
+  useEffect(() => {
+    if (user && !isLoading) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user, isLoading, navigate]);
 
   const handleEnter = () => {
     setIsAnimating(true);
-    setTimeout(() => navigate('/dashboard'), 300);
+    setTimeout(() => navigate('/auth'), 300);
   };
 
   return (
@@ -69,12 +78,20 @@ const Welcome = () => {
           size="xl" 
           className="w-full"
         >
-          Entrar al devocional de hoy
+          <LogIn className="w-5 h-5" />
+          Comenzar ahora
         </Button>
 
         <p className="text-xs text-muted-foreground mt-6">
           Inicia tu jornada espiritual hoy
         </p>
+
+        <Link 
+          to="/auth" 
+          className="block mt-4 text-sm text-primary hover:underline"
+        >
+          ¿Ya tienes cuenta? Inicia sesión
+        </Link>
       </div>
     </div>
   );
