@@ -38,10 +38,24 @@ export function ChatAssistant() {
     }
   }, [isOpen]);
 
+  const MAX_MESSAGE_LENGTH = 500;
+  const MAX_MESSAGES_HISTORY = 20;
+
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
 
-    const userMessage: Message = { role: 'user', content: input.trim() };
+    const trimmedInput = input.trim();
+
+    // Validate message length
+    if (trimmedInput.length > MAX_MESSAGE_LENGTH) {
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: `Tu mensaje es demasiado largo. El máximo permitido es ${MAX_MESSAGE_LENGTH} caracteres.` 
+      }]);
+      return;
+    }
+
+    const userMessage: Message = { role: 'user', content: trimmedInput };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
@@ -60,13 +74,18 @@ export function ChatAssistant() {
     };
 
     try {
+      // Limit message history sent to API
+      const recentMessages = [...messages, userMessage]
+        .filter(m => m.role !== 'assistant' || messages.indexOf(m) > 0)
+        .slice(-MAX_MESSAGES_HISTORY);
+
       const resp = await fetch(CHAT_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ messages: [...messages, userMessage].filter(m => m.role !== 'assistant' || messages.indexOf(m) > 0) }),
+        body: JSON.stringify({ messages: recentMessages }),
       });
 
       if (!resp.ok || !resp.body) {
