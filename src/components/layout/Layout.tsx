@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Header } from './Header';
 import { BottomNav } from './BottomNav';
+import { ChatAssistant } from '@/components/ChatAssistant';
 
 interface LayoutProps {
   children: ReactNode;
@@ -22,6 +23,7 @@ export function Layout({
         {children}
       </main>
       {showNav && <BottomNav />}
+      <ChatAssistant />
     </div>
   );
 }

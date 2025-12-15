@@ -1,12 +1,27 @@
 import { Layout } from '@/components/layout/Layout';
 import { HistorialCard } from '@/components/HistorialCard';
 import { PremiumBanner } from '@/components/PremiumBanner';
-import { historialDevocionales } from '@/data/mockData';
+import { getHistorialDevocionales, formatFechaEspanol } from '@/data/devocionales365';
 import { useApp } from '@/context/AppContext';
+import { useMemo } from 'react';
 
 const Historial = () => {
   const { usuario } = useApp();
   const isGratuito = usuario.tipoAcceso === 'gratuito';
+  
+  // Get past devotionals based on access type
+  const daysToShow = isGratuito ? 3 : 30;
+  const historialDevocionales = useMemo(() => {
+    const today = new Date();
+    return getHistorialDevocionales(daysToShow, today).map((dev, index) => {
+      const pastDate = new Date();
+      pastDate.setDate(pastDate.getDate() - (index + 1));
+      return {
+        ...dev,
+        fecha: formatFechaEspanol(pastDate)
+      };
+    });
+  }, [daysToShow]);
 
   return (
     <Layout headerTitle="Historial">

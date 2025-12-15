@@ -2,13 +2,30 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
-import { historialDevocionales } from '@/data/mockData';
+import { devocionales365, formatFechaEspanol } from '@/data/devocionales365';
+import { useMemo } from 'react';
 
 const DevocionalDetalle = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  const devotional = historialDevocionales.find(d => d.id === id);
+  const devotional = useMemo(() => {
+    const devId = parseInt(id || '0', 10);
+    return devocionales365.find(d => d.id === devId);
+  }, [id]);
+
+  // Calculate the date for this devotional (going back from today)
+  const fecha = useMemo(() => {
+    if (!devotional) return '';
+    const devId = parseInt(id || '0', 10);
+    const today = new Date();
+    const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
+    const todayIndex = ((dayOfYear - 1) % 365);
+    const daysBack = (todayIndex - (devId - 1) + 365) % 365;
+    const pastDate = new Date();
+    pastDate.setDate(pastDate.getDate() - daysBack);
+    return formatFechaEspanol(pastDate);
+  }, [devotional, id]);
 
   if (!devotional) {
     return (
@@ -39,7 +56,7 @@ const DevocionalDetalle = () => {
           <div className="p-5 gradient-spiritual text-primary-foreground">
             <div className="flex items-center gap-2 mb-2 opacity-80">
               <BookOpen className="w-4 h-4" />
-              <span className="text-xs font-medium">{devotional.fecha}</span>
+              <span className="text-xs font-medium">{fecha}</span>
             </div>
             <h1 className="font-serif text-xl font-semibold leading-tight">
               {devotional.titulo}

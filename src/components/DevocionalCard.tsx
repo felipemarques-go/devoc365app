@@ -1,11 +1,14 @@
 import { BookOpen, CheckCircle2, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useApp } from '@/context/AppContext';
-import { devocionalHoy } from '@/data/mockData';
+import { getDevocionalDelDia, formatFechaEspanol } from '@/data/devocionales365';
 import { cn } from '@/lib/utils';
 
 export function DevocionalCard() {
   const { devocionalCompletadoHoy, marcarDevocionalCompletado, usuario } = useApp();
+  
+  const devocionalHoy = getDevocionalDelDia();
+  const fechaHoy = formatFechaEspanol(new Date());
 
   return (
     <article className="mx-4 animate-slide-up">
@@ -17,7 +20,7 @@ export function DevocionalCard() {
             {usuario.streakActual} días seguidos
           </span>
         </div>
-        <span className="text-xs text-muted-foreground">{devocionalHoy.fecha}</span>
+        <span className="text-xs text-muted-foreground">{fechaHoy}</span>
       </div>
 
       {/* Main card */}
