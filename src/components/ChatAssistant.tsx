@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Loader2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { HOTMART_PREMIUM_URL } from '@/data/mockData';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -12,6 +12,7 @@ interface Message {
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-assistant`;
 
 export function ChatAssistant() {
+  const { session, user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -23,6 +24,11 @@ export function ChatAssistant() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Only show chat assistant if user is authenticated
+  if (!user || !session) {
+    return null;
+  }
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -83,7 +89,7 @@ export function ChatAssistant() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({ messages: recentMessages }),
       });
@@ -146,10 +152,12 @@ export function ChatAssistant() {
         }
       }
     } catch (error) {
-      console.error('Chat error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: 'Lo siento, hubo un error al procesar tu mensaje. Por favor, intenta de nuevo.' 
+        content: errorMessage.includes('Límite') 
+          ? errorMessage 
+          : 'Lo siento, hubo un error al procesar tu mensaje. Por favor, intenta de nuevo.' 
       }]);
     } finally {
       setIsLoading(false);

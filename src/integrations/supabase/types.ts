@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      chat_rate_limits: {
+        Row: {
+          chat_count: number
+          created_at: string
+          id: string
+          reset_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chat_count?: number
+          created_at?: string
+          id?: string
+          reset_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chat_count?: number
+          created_at?: string
+          id?: string
+          reset_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
