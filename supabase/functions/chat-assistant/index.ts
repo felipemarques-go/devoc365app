@@ -1,4 +1,6 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -31,6 +33,7 @@ Mantén un tono respetuoso, cristiano, sin debates teológicos ni temas polémic
 
 const MAX_MESSAGE_LENGTH = 500;
 const MAX_MESSAGES = 20;
+const RATE_LIMIT_PER_HOUR = 50;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -38,6 +41,100 @@ serve(async (req) => {
   }
 
   try {
+    // Validate authorization header
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      console.error("Missing or invalid authorization header");
+      return new Response(JSON.stringify({ error: "No autenticado" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Create Supabase client with user's JWT
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
+    
+    const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    // Verify user authentication
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+    if (authError || !user) {
+      console.error("Authentication failed:", authError?.message);
+      return new Response(JSON.stringify({ error: "No autenticado" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    console.log("User authenticated:", user.id);
+
+    // Check rate limit
+    const { data: rateData, error: rateError } = await supabaseClient
+      .from("chat_rate_limits")
+      .select("chat_count, reset_at")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (rateError) {
+      console.error("Rate limit check error:", rateError.message);
+    }
+
+    const now = new Date();
+    const oneHourFromNow = new Date(now.getTime() + 3600000);
+
+    if (rateData) {
+      const resetAt = new Date(rateData.reset_at);
+      
+      if (now > resetAt) {
+        // Reset the counter
+        const { error: updateError } = await supabaseClient
+          .from("chat_rate_limits")
+          .update({ 
+            chat_count: 1, 
+            reset_at: oneHourFromNow.toISOString() 
+          })
+          .eq("user_id", user.id);
+        
+        if (updateError) {
+          console.error("Rate limit reset error:", updateError.message);
+        }
+      } else if (rateData.chat_count >= RATE_LIMIT_PER_HOUR) {
+        console.log("Rate limit exceeded for user:", user.id);
+        return new Response(JSON.stringify({ 
+          error: "Límite de mensajes alcanzado. Intenta de nuevo en una hora." 
+        }), {
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      } else {
+        // Increment counter
+        const { error: updateError } = await supabaseClient
+          .from("chat_rate_limits")
+          .update({ chat_count: rateData.chat_count + 1 })
+          .eq("user_id", user.id);
+        
+        if (updateError) {
+          console.error("Rate limit increment error:", updateError.message);
+        }
+      }
+    } else {
+      // Create new rate limit record
+      const { error: insertError } = await supabaseClient
+        .from("chat_rate_limits")
+        .insert({ 
+          user_id: user.id, 
+          chat_count: 1,
+          reset_at: oneHourFromNow.toISOString()
+        });
+      
+      if (insertError) {
+        console.error("Rate limit insert error:", insertError.message);
+      }
+    }
+
     const body = await req.json();
     const { messages } = body;
 
@@ -147,7 +244,7 @@ serve(async (req) => {
     });
   } catch (error) {
     console.error("Chat assistant error:", error);
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Error desconocido" }), {
+    return new Response(JSON.stringify({ error: "Error desconocido" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
