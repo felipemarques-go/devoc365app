@@ -16,6 +16,8 @@ import Perfil from "./pages/Perfil";
 import Configuracion from "./pages/Configuracion";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import LoginPage from "./pages/LoginPage";
+import AppPage from "./pages/AppPage";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +31,8 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Welcome />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/app" element={<AppPage />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={
                 <ProtectedRoute>
