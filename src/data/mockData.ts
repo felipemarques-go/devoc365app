@@ -136,4 +136,4 @@ export const usuarioMock: Usuario = {
   metaDias: 30
 };
 
-export const HOTMART_PREMIUM_URL = 'https://pay.hotmart.com/J103412527T?checkoutMode=10';
+export const HOTMART_PREMIUM_URL = 'https://pay.hotmart.com/S103473783Y?off=uedjed13&checkoutMode=10';
