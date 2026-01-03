@@ -3,10 +3,12 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sun, BookOpen, Heart, LogIn } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { useLanguage } from '@/context/LanguageContext';
 
 const Welcome = () => {
   const navigate = useNavigate();
   const { user, isLoading } = useAuth();
+  const { t } = useLanguage();
   const [isAnimating, setIsAnimating] = useState(false);
 
   // Redirect to dashboard if already logged in
@@ -36,16 +38,16 @@ const Welcome = () => {
             <Sun className="w-10 h-10 text-primary-foreground" />
           </div>
           <h1 className="font-serif text-4xl font-bold text-foreground mb-2">Devoc365</h1>
-          <p className="text-muted-foreground text-sm">Tu compañero espiritual diario</p>
+          <p className="text-muted-foreground text-sm">{t('welcome.subtitle')}</p>
         </div>
 
         {/* Welcome message */}
         <div className="mb-10 space-y-4">
           <h2 className="font-serif text-2xl font-semibold text-foreground">
-            ¡Bienvenido(a) a Devoc365!
+            {t('welcome.title')}
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            Tu devocional diario en 5–10 minutos, directamente en tu celular.
+            {t('welcome.description')}
           </p>
         </div>
 
@@ -55,19 +57,19 @@ const Welcome = () => {
             <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center mx-auto mb-2">
               <BookOpen className="w-6 h-6 text-primary" />
             </div>
-            <p className="text-xs text-muted-foreground">Versículo diario</p>
+            <p className="text-xs text-muted-foreground">{t('welcome.dailyVerse')}</p>
           </div>
           <div className="text-center">
             <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center mx-auto mb-2">
               <Heart className="w-6 h-6 text-accent" />
             </div>
-            <p className="text-xs text-muted-foreground">Reflexiones</p>
+            <p className="text-xs text-muted-foreground">{t('welcome.reflections')}</p>
           </div>
           <div className="text-center">
             <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center mx-auto mb-2">
               <Sun className="w-6 h-6 text-primary" />
             </div>
-            <p className="text-xs text-muted-foreground">Oraciones</p>
+            <p className="text-xs text-muted-foreground">{t('welcome.prayers')}</p>
           </div>
         </div>
 
@@ -79,18 +81,18 @@ const Welcome = () => {
           className="w-full"
         >
           <LogIn className="w-5 h-5" />
-          Comenzar ahora
+          {t('welcome.startNow')}
         </Button>
 
         <p className="text-xs text-muted-foreground mt-6">
-          Inicia tu jornada espiritual hoy
+          {t('welcome.startJourney')}
         </p>
 
         <Link 
           to="/auth" 
           className="block mt-4 text-sm text-primary hover:underline"
         >
-          ¿Ya tienes cuenta? Inicia sesión
+          {t('welcome.haveAccount')}
         </Link>
       </div>
     </div>
