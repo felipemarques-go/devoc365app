@@ -1,24 +1,41 @@
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { useApp } from '@/context/AppContext';
+import { useLanguage, Language } from '@/context/LanguageContext';
 import { HOTMART_PREMIUM_URL } from '@/data/mockData';
-import { Bell, Globe, ExternalLink, LogOut } from 'lucide-react';
+import { Bell, Globe, ExternalLink, LogOut, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+
+const languages = [
+  { code: 'en' as Language, name: 'English', flag: '🇺🇸' },
+  { code: 'pt' as Language, name: 'Português', flag: '🇧🇷' },
+  { code: 'es' as Language, name: 'Español', flag: '🇪🇸' },
+];
 
 const Configuracion = () => {
   const { horarioLembrete, setHorarioLembrete } = useApp();
+  const { language, setLanguage, t } = useLanguage();
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
 
   const horarios = [
-    { id: 'mañana', label: 'Mañana', time: '7:00 AM' },
-    { id: 'tarde', label: 'Tarde', time: '2:00 PM' },
-    { id: 'noche', label: 'Noche', time: '9:00 PM' },
+    { id: 'mañana', label: t('settings.morning'), time: '7:00 AM' },
+    { id: 'tarde', label: t('settings.afternoon'), time: '2:00 PM' },
+    { id: 'noche', label: t('settings.night'), time: '9:00 PM' },
   ];
 
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+  };
+
   return (
-    <Layout headerTitle="Configuración">
+    <Layout headerTitle={t('settings.title')}>
       <div className="py-4 px-4 space-y-6 animate-fade-in">
         <h1 className="font-serif text-2xl font-semibold text-foreground mb-6">
-          Configuración
+          {t('settings.title')}
         </h1>
 
         {/* Reminder time */}
@@ -28,8 +45,7 @@ const Configuracion = () => {
               <Bell className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h3 className="font-semibold text-foreground">Horario de recordatorio</h3>
-              <p className="text-sm text-muted-foreground">¿Cuándo prefieres tu devocional?</p>
+              <h3 className="font-semibold text-foreground">{t('settings.reminderTime')}</h3>
             </div>
           </div>
           
@@ -54,14 +70,36 @@ const Configuracion = () => {
 
         {/* Language */}
         <div className="p-5 rounded-2xl bg-card border border-border shadow-card">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
               <Globe className="w-5 h-5 text-primary" />
             </div>
-            <div className="flex-1">
-              <h3 className="font-semibold text-foreground">Idioma</h3>
-              <p className="text-sm text-muted-foreground">Español (predeterminado)</p>
+            <div>
+              <h3 className="font-semibold text-foreground">{t('settings.language')}</h3>
             </div>
+          </div>
+          
+          <div className="space-y-2">
+            {languages.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => setLanguage(lang.code)}
+                className={cn(
+                  "w-full p-3 rounded-xl flex items-center justify-between transition-all duration-200",
+                  language === lang.code
+                    ? 'bg-primary/10 border border-primary/30'
+                    : 'bg-muted hover:bg-muted/80'
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-xl">{lang.flag}</span>
+                  <span className="font-medium text-foreground">{lang.name}</span>
+                </div>
+                {language === lang.code && (
+                  <Check className="w-5 h-5 text-primary" />
+                )}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -73,15 +111,16 @@ const Configuracion = () => {
             onClick={() => window.open(HOTMART_PREMIUM_URL, '_blank')}
           >
             <ExternalLink className="w-4 h-4" />
-            Gestionar mi suscripción
+            {t('settings.manageSubscription')}
           </Button>
           
           <Button 
             variant="ghost" 
             className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
+            onClick={handleLogout}
           >
             <LogOut className="w-4 h-4" />
-            Cerrar sesión
+            {t('settings.logout')}
           </Button>
         </div>
       </div>
