@@ -35,11 +35,11 @@ const translations: Record<Language, Record<string, string>> = {
     'devotional.completed': '¡Completado!',
     
     // Navigation
-    'nav.home': 'Inicio',
+    'nav.home': 'Hoy',
     'nav.history': 'Historial',
     'nav.routes': 'Rutas',
     'nav.profile': 'Perfil',
-    'nav.settings': 'Configuración',
+    'nav.settings': 'Config',
     
     // Settings
     'settings.title': 'Configuración',
@@ -52,11 +52,18 @@ const translations: Record<Language, Record<string, string>> = {
     'settings.logout': 'Cerrar sesión',
     
     // Profile
-    'profile.title': 'Mi Perfil',
-    'profile.daysCompleted': 'Días completados',
+    'profile.title': 'Perfil',
+    'profile.hello': '¡Hola,',
+    'profile.daysCompleted': 'Días totales',
     'profile.currentStreak': 'Racha actual',
     'profile.bestStreak': 'Mejor racha',
-    'profile.goal': 'Meta de días',
+    'profile.goal': 'Mi meta devocional',
+    'profile.days': 'días',
+    'profile.progress': 'Progreso',
+    'profile.premiumActive': 'Premium activo',
+    'profile.upgradePremium': 'Mejorar a Premium',
+    'profile.manageSubscription': 'Gestionar mi suscripción',
+    'profile.logout': 'Cerrar sesión',
     
     // Auth
     'auth.login': 'Iniciar sesión',
@@ -64,20 +71,37 @@ const translations: Record<Language, Record<string, string>> = {
     'auth.email': 'Correo electrónico',
     'auth.password': 'Contraseña',
     'auth.name': 'Nombre',
+    'auth.yourName': 'Tu nombre',
     'auth.forgotPassword': '¿Olvidaste tu contraseña?',
     'auth.noAccount': '¿No tienes cuenta?',
     'auth.hasAccount': '¿Ya tienes cuenta?',
+    'auth.welcomeBack': 'Bienvenido de vuelta',
+    'auth.createAccount': 'Crea tu cuenta',
+    'auth.invalidEmail': 'Correo electrónico inválido',
+    'auth.passwordMin': 'La contraseña debe tener al menos 6 caracteres',
+    'auth.invalidCredentials': 'Credenciales incorrectas. Verifica tu correo y contraseña.',
+    'auth.alreadyRegistered': 'Este correo ya está registrado. Intenta iniciar sesión.',
+    'auth.genericError': 'Ocurrió un error. Por favor, intenta de nuevo.',
+    'auth.signUp': 'Regístrate',
+    'auth.signIn': 'Inicia sesión',
     
     // History
     'history.title': 'Historial',
+    'history.subtitle': 'Devocionales anteriores',
+    'history.limitedAccess': 'Acceso limitado a los últimos 3 días. Mejora a Premium para ver todo el historial.',
+    'history.fullAccess': 'Tu historial completo de devocionales.',
     'history.last30Days': 'Últimos 30 días',
     
     // Routes
-    'routes.title': 'Rutas Temáticas',
+    'routes.title': 'Rutas temáticas',
+    'routes.subtitle': 'Planes devocionales especiales para profundizar tu fe.',
     'routes.locked': 'Premium',
     
     // Premium
-    'premium.upgrade': 'Actualizar a Premium',
+    'premium.title': 'Devoc365 Premium',
+    'premium.description': 'Acceso completo a historial, rutas temáticas y más contenido devocional.',
+    'premium.upgrade': 'Mejorar a Premium',
+    'premium.upgradeNow': 'Mejorar ahora',
     'premium.unlock': 'Desbloquear contenido premium',
   },
   pt: {
@@ -105,11 +129,11 @@ const translations: Record<Language, Record<string, string>> = {
     'devotional.completed': 'Concluído!',
     
     // Navigation
-    'nav.home': 'Início',
+    'nav.home': 'Hoje',
     'nav.history': 'Histórico',
     'nav.routes': 'Rotas',
     'nav.profile': 'Perfil',
-    'nav.settings': 'Configurações',
+    'nav.settings': 'Config',
     
     // Settings
     'settings.title': 'Configurações',
@@ -122,11 +146,18 @@ const translations: Record<Language, Record<string, string>> = {
     'settings.logout': 'Sair',
     
     // Profile
-    'profile.title': 'Meu Perfil',
-    'profile.daysCompleted': 'Dias completados',
+    'profile.title': 'Perfil',
+    'profile.hello': 'Olá,',
+    'profile.daysCompleted': 'Dias totais',
     'profile.currentStreak': 'Sequência atual',
     'profile.bestStreak': 'Melhor sequência',
-    'profile.goal': 'Meta de dias',
+    'profile.goal': 'Minha meta devocional',
+    'profile.days': 'dias',
+    'profile.progress': 'Progresso',
+    'profile.premiumActive': 'Premium ativo',
+    'profile.upgradePremium': 'Atualizar para Premium',
+    'profile.manageSubscription': 'Gerenciar minha assinatura',
+    'profile.logout': 'Sair',
     
     // Auth
     'auth.login': 'Entrar',
@@ -134,20 +165,37 @@ const translations: Record<Language, Record<string, string>> = {
     'auth.email': 'E-mail',
     'auth.password': 'Senha',
     'auth.name': 'Nome',
+    'auth.yourName': 'Seu nome',
     'auth.forgotPassword': 'Esqueceu sua senha?',
     'auth.noAccount': 'Não tem conta?',
     'auth.hasAccount': 'Já tem conta?',
+    'auth.welcomeBack': 'Bem-vindo de volta',
+    'auth.createAccount': 'Crie sua conta',
+    'auth.invalidEmail': 'E-mail inválido',
+    'auth.passwordMin': 'A senha deve ter pelo menos 6 caracteres',
+    'auth.invalidCredentials': 'Credenciais incorretas. Verifique seu e-mail e senha.',
+    'auth.alreadyRegistered': 'Este e-mail já está registrado. Tente fazer login.',
+    'auth.genericError': 'Ocorreu um erro. Por favor, tente novamente.',
+    'auth.signUp': 'Cadastre-se',
+    'auth.signIn': 'Entrar',
     
     // History
     'history.title': 'Histórico',
+    'history.subtitle': 'Devocionais anteriores',
+    'history.limitedAccess': 'Acesso limitado aos últimos 3 dias. Atualize para Premium para ver todo o histórico.',
+    'history.fullAccess': 'Seu histórico completo de devocionais.',
     'history.last30Days': 'Últimos 30 dias',
     
     // Routes
-    'routes.title': 'Rotas Temáticas',
+    'routes.title': 'Rotas temáticas',
+    'routes.subtitle': 'Planos devocionais especiais para aprofundar sua fé.',
     'routes.locked': 'Premium',
     
     // Premium
+    'premium.title': 'Devoc365 Premium',
+    'premium.description': 'Acesso completo ao histórico, rotas temáticas e mais conteúdo devocional.',
     'premium.upgrade': 'Atualizar para Premium',
+    'premium.upgradeNow': 'Atualizar agora',
     'premium.unlock': 'Desbloquear conteúdo premium',
   },
   en: {
@@ -175,7 +223,7 @@ const translations: Record<Language, Record<string, string>> = {
     'devotional.completed': 'Completed!',
     
     // Navigation
-    'nav.home': 'Home',
+    'nav.home': 'Today',
     'nav.history': 'History',
     'nav.routes': 'Routes',
     'nav.profile': 'Profile',
@@ -192,11 +240,18 @@ const translations: Record<Language, Record<string, string>> = {
     'settings.logout': 'Log out',
     
     // Profile
-    'profile.title': 'My Profile',
-    'profile.daysCompleted': 'Days completed',
+    'profile.title': 'Profile',
+    'profile.hello': 'Hello,',
+    'profile.daysCompleted': 'Total days',
     'profile.currentStreak': 'Current streak',
     'profile.bestStreak': 'Best streak',
-    'profile.goal': 'Day goal',
+    'profile.goal': 'My devotional goal',
+    'profile.days': 'days',
+    'profile.progress': 'Progress',
+    'profile.premiumActive': 'Premium active',
+    'profile.upgradePremium': 'Upgrade to Premium',
+    'profile.manageSubscription': 'Manage my subscription',
+    'profile.logout': 'Log out',
     
     // Auth
     'auth.login': 'Log in',
@@ -204,20 +259,37 @@ const translations: Record<Language, Record<string, string>> = {
     'auth.email': 'Email',
     'auth.password': 'Password',
     'auth.name': 'Name',
+    'auth.yourName': 'Your name',
     'auth.forgotPassword': 'Forgot your password?',
     'auth.noAccount': "Don't have an account?",
     'auth.hasAccount': 'Already have an account?',
+    'auth.welcomeBack': 'Welcome back',
+    'auth.createAccount': 'Create your account',
+    'auth.invalidEmail': 'Invalid email address',
+    'auth.passwordMin': 'Password must be at least 6 characters',
+    'auth.invalidCredentials': 'Invalid credentials. Please check your email and password.',
+    'auth.alreadyRegistered': 'This email is already registered. Try logging in.',
+    'auth.genericError': 'An error occurred. Please try again.',
+    'auth.signUp': 'Sign up',
+    'auth.signIn': 'Sign in',
     
     // History
     'history.title': 'History',
+    'history.subtitle': 'Previous devotionals',
+    'history.limitedAccess': 'Limited access to the last 3 days. Upgrade to Premium to see the full history.',
+    'history.fullAccess': 'Your complete devotional history.',
     'history.last30Days': 'Last 30 days',
     
     // Routes
     'routes.title': 'Thematic Routes',
+    'routes.subtitle': 'Special devotional plans to deepen your faith.',
     'routes.locked': 'Premium',
     
     // Premium
+    'premium.title': 'Devoc365 Premium',
+    'premium.description': 'Full access to history, thematic routes, and more devotional content.',
     'premium.upgrade': 'Upgrade to Premium',
+    'premium.upgradeNow': 'Upgrade now',
     'premium.unlock': 'Unlock premium content',
   },
 };

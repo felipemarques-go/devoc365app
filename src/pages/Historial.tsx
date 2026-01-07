@@ -3,10 +3,13 @@ import { HistorialCard } from '@/components/HistorialCard';
 import { PremiumBanner } from '@/components/PremiumBanner';
 import { getHistorialDevocionales, formatFechaEspanol } from '@/data/mockData';
 import { useApp } from '@/context/AppContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { useMemo } from 'react';
+import { formatFecha } from '@/data/devocionales365';
 
 const Historial = () => {
   const { usuario } = useApp();
+  const { t, language } = useLanguage();
   const isGratuito = usuario.tipoAcceso === 'gratuito';
   
   // Get past devotionals based on access type
@@ -18,22 +21,22 @@ const Historial = () => {
       pastDate.setDate(pastDate.getDate() - (index + 1));
       return {
         ...dev,
-        fecha: formatFechaEspanol(pastDate)
+        fecha: formatFecha(pastDate, language)
       };
     });
-  }, [daysToShow]);
+  }, [daysToShow, language]);
 
   return (
-    <Layout headerTitle="Historial">
+    <Layout headerTitle={t('history.title')}>
       <div className="py-4 px-4 space-y-4">
         <div className="mb-6">
           <h1 className="font-serif text-2xl font-semibold text-foreground mb-1">
-            Devocionales anteriores
+            {t('history.subtitle')}
           </h1>
           <p className="text-sm text-muted-foreground">
             {isGratuito 
-              ? 'Acceso limitado a los últimos 3 días. Mejora a Premium para ver todo el historial.'
-              : 'Tu historial completo de devocionales.'}
+              ? t('history.limitedAccess')
+              : t('history.fullAccess')}
           </p>
         </div>
 

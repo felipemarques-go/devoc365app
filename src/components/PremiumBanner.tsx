@@ -1,12 +1,15 @@
 import { Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { HOTMART_PREMIUM_URL } from '@/data/mockData';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface PremiumBannerProps {
   variant?: 'full' | 'compact';
 }
 
 export function PremiumBanner({ variant = 'full' }: PremiumBannerProps) {
+  const { t } = useLanguage();
+  
   const handleClick = () => {
     window.open(HOTMART_PREMIUM_URL, '_blank');
   };
@@ -18,7 +21,7 @@ export function PremiumBanner({ variant = 'full' }: PremiumBannerProps) {
         className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-accent/10 to-amber-500/10 border border-accent/20 hover:border-accent/40 transition-all duration-200"
       >
         <Sparkles className="w-4 h-4 text-accent" />
-        <span className="text-sm font-medium text-foreground">Mejorar a Premium</span>
+        <span className="text-sm font-medium text-foreground">{t('premium.upgrade')}</span>
       </button>
     );
   }
@@ -31,13 +34,13 @@ export function PremiumBanner({ variant = 'full' }: PremiumBannerProps) {
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="font-serif font-semibold text-foreground mb-1">
-            Devoc365 Premium
+            {t('premium.title')}
           </h3>
           <p className="text-sm text-muted-foreground mb-3">
-            Acceso completo a historial, rutas temáticas y más contenido devocional.
+            {t('premium.description')}
           </p>
           <Button onClick={handleClick} variant="premium" size="sm">
-            Mejorar ahora
+            {t('premium.upgradeNow')}
           </Button>
         </div>
       </div>
