@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sun, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { useLanguage, Language } from '@/context/LanguageContext';
+import background from '@/assets/background.png';
+import logo from '@/assets/logo.png';
 
 const languages = [
   { code: 'en' as Language, name: 'English', flag: '🇺🇸' },
@@ -38,20 +40,14 @@ const LanguageSelection = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 -left-20 w-64 h-64 rounded-full bg-primary/5 blur-3xl animate-pulse-soft" />
-        <div className="absolute bottom-20 -right-20 w-80 h-80 rounded-full bg-accent/10 blur-3xl animate-pulse-soft" style={{ animationDelay: '1s' }} />
-      </div>
-
+    <div 
+      className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${background})` }}
+    >
       <div className="relative z-10 max-w-sm w-full text-center animate-fade-in">
         {/* Logo */}
         <div className="mb-8">
-          <div className="w-20 h-20 rounded-2xl gradient-spiritual flex items-center justify-center mx-auto mb-4 shadow-soft">
-            <Sun className="w-10 h-10 text-primary-foreground" />
-          </div>
-          <h1 className="font-serif text-4xl font-bold text-foreground mb-2">Devoc365</h1>
+          <img src={logo} alt="Devoc365" className="w-32 h-32 mx-auto mb-4" />
         </div>
 
         {/* Language selection */}
