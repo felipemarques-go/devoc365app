@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
-import { devocionales365, formatFechaEspanol } from '@/data/devocionales365';
+import { devocionales365, formatFechaEspanol } from '@/data/mockData';
 import { useMemo } from 'react';
 
 const DevocionalDetalle = () => {

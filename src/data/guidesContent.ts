@@ -1,5 +1,5 @@
 import { Language } from '@/context/LanguageContext';
-import { getDayOfYear } from './devocionales365';
+import { getDayOfYear } from './mockData';
 
 interface GuideContent {
   protection: {
