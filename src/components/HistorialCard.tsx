@@ -1,6 +1,6 @@
 import { ChevronRight, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Devocional365 } from '@/data/devocionales365';
+import { Devocional365 } from '@/data/mockData';
 import { useApp } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
 

@@ -2,7 +2,7 @@ import { BookOpen, CheckCircle2, Flame, Shield, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useApp } from '@/context/AppContext';
 import { useLanguage } from '@/context/LanguageContext';
-import { getDevocionalDelDia, formatFechaEspanol } from '@/data/devocionales365';
+import { getDevocionalDelDia } from '@/data/mockData';
 import { getGuidesForDay } from '@/data/guidesContent';
 import { cn } from '@/lib/utils';
 

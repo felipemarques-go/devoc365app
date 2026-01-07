@@ -1,7 +1,7 @@
 import { Layout } from '@/components/layout/Layout';
 import { HistorialCard } from '@/components/HistorialCard';
 import { PremiumBanner } from '@/components/PremiumBanner';
-import { getHistorialDevocionales, formatFechaEspanol } from '@/data/devocionales365';
+import { getHistorialDevocionales, formatFechaEspanol } from '@/data/mockData';
 import { useApp } from '@/context/AppContext';
 import { useMemo } from 'react';
 
