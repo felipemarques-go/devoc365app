@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sun, Check } from 'lucide-react';
-import { useLanguage, Language } from '@/context/LanguageContext';
+import { Language } from '@/context/LanguageContext';
 
 const languages = [
   { code: 'en' as Language, name: 'English', flag: '🇺🇸' },
@@ -10,14 +10,22 @@ const languages = [
   { code: 'es' as Language, name: 'Español', flag: '🇪🇸' },
 ];
 
+const selectTexts: Record<Language, { title: string; continue: string }> = {
+  en: { title: 'Select your language', continue: 'Continue' },
+  pt: { title: 'Selecione seu idioma', continue: 'Continuar' },
+  es: { title: 'Selecciona tu idioma', continue: 'Continuar' },
+};
+
 const LanguageSelection = () => {
   const navigate = useNavigate();
-  const { setLanguage, t } = useLanguage();
   const [selectedLang, setSelectedLang] = useState<Language>('es');
 
   const handleContinue = () => {
-    setLanguage(selectedLang);
-    navigate('/');
+    // Save directly to localStorage (same keys used by LanguageContext)
+    localStorage.setItem('devoc365_language', selectedLang);
+    localStorage.setItem('devoc365_language_selected', 'true');
+    // Force page reload so LanguageProvider picks up the new values
+    window.location.href = '/';
   };
 
   return (
@@ -40,11 +48,7 @@ const LanguageSelection = () => {
         {/* Language selection */}
         <div className="mb-8">
           <h2 className="font-serif text-xl font-semibold text-foreground mb-6">
-            {languages.find(l => l.code === selectedLang)?.code === 'en' 
-              ? 'Select your language'
-              : languages.find(l => l.code === selectedLang)?.code === 'pt'
-              ? 'Selecione seu idioma'
-              : 'Selecciona tu idioma'}
+            {selectTexts[selectedLang].title}
           </h2>
 
           <div className="space-y-3">
@@ -79,7 +83,7 @@ const LanguageSelection = () => {
           size="xl" 
           className="w-full"
         >
-          {selectedLang === 'en' ? 'Continue' : selectedLang === 'pt' ? 'Continuar' : 'Continuar'}
+          {selectTexts[selectedLang].continue}
         </Button>
       </div>
     </div>
