@@ -3,20 +3,22 @@ import { RutaCard } from '@/components/RutaCard';
 import { PremiumBanner } from '@/components/PremiumBanner';
 import { rutasTematicas } from '@/data/mockData';
 import { useApp } from '@/context/AppContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 const Rutas = () => {
   const { usuario } = useApp();
+  const { t } = useLanguage();
   const isGratuito = usuario.tipoAcceso === 'gratuito';
 
   return (
-    <Layout headerTitle="Rutas temáticas">
+    <Layout headerTitle={t('routes.title')}>
       <div className="py-4 px-4 space-y-4">
         <div className="mb-6">
           <h1 className="font-serif text-2xl font-semibold text-foreground mb-1">
-            Rutas temáticas
+            {t('routes.title')}
           </h1>
           <p className="text-sm text-muted-foreground">
-            Planes devocionales especiales para profundizar tu fe.
+            {t('routes.subtitle')}
           </p>
         </div>
 
