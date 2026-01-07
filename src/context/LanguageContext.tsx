@@ -33,6 +33,9 @@ const translations: Record<Language, Record<string, string>> = {
     'devotional.prosperity': 'Guía de Prosperidad',
     'devotional.markComplete': 'Marcar como completado',
     'devotional.completed': '¡Completado!',
+    'devotional.notFound': 'Devocional no encontrado',
+    'devotional.back': 'Volver',
+    'devotional.viewPrevious': 'Ver devocionales anteriores',
     
     // Navigation
     'nav.home': 'Hoy',
@@ -96,6 +99,17 @@ const translations: Record<Language, Record<string, string>> = {
     'routes.title': 'Rutas temáticas',
     'routes.subtitle': 'Planes devocionales especiales para profundizar tu fe.',
     'routes.locked': 'Premium',
+    'routes.days': 'días',
+    
+    // Route titles
+    'route.hope.title': '30 días de esperanza',
+    'route.hope.description': 'Descubre cómo la esperanza en Dios puede transformar tu perspectiva diaria y llevarte a una vida de propósito.',
+    'route.healing.title': '21 días de sanidad interior',
+    'route.healing.description': 'Un camino de restauración emocional y espiritual guiado por la Palabra de Dios.',
+    'route.family.title': '14 días por la familia',
+    'route.family.description': 'Fortalece los lazos familiares a través de devocionales enfocados en el amor y la unidad.',
+    'route.restart.title': '7 días para recomenzar con Dios',
+    'route.restart.description': 'Una semana para renovar tu relación con Dios y empezar de nuevo con fe renovada.',
     
     // Premium
     'premium.title': 'Devoc365 Premium',
@@ -127,6 +141,9 @@ const translations: Record<Language, Record<string, string>> = {
     'devotional.prosperity': 'Guia de Prosperidade',
     'devotional.markComplete': 'Marcar como concluído',
     'devotional.completed': 'Concluído!',
+    'devotional.notFound': 'Devocional não encontrado',
+    'devotional.back': 'Voltar',
+    'devotional.viewPrevious': 'Ver devocionais anteriores',
     
     // Navigation
     'nav.home': 'Hoje',
@@ -190,6 +207,17 @@ const translations: Record<Language, Record<string, string>> = {
     'routes.title': 'Rotas temáticas',
     'routes.subtitle': 'Planos devocionais especiais para aprofundar sua fé.',
     'routes.locked': 'Premium',
+    'routes.days': 'dias',
+    
+    // Route titles
+    'route.hope.title': '30 dias de esperança',
+    'route.hope.description': 'Descubra como a esperança em Deus pode transformar sua perspectiva diária e levá-lo a uma vida de propósito.',
+    'route.healing.title': '21 dias de cura interior',
+    'route.healing.description': 'Um caminho de restauração emocional e espiritual guiado pela Palavra de Deus.',
+    'route.family.title': '14 dias pela família',
+    'route.family.description': 'Fortaleça os laços familiares através de devocionais focados no amor e na unidade.',
+    'route.restart.title': '7 dias para recomeçar com Deus',
+    'route.restart.description': 'Uma semana para renovar seu relacionamento com Deus e começar de novo com fé renovada.',
     
     // Premium
     'premium.title': 'Devoc365 Premium',
@@ -221,6 +249,9 @@ const translations: Record<Language, Record<string, string>> = {
     'devotional.prosperity': 'Prosperity Guide',
     'devotional.markComplete': 'Mark as complete',
     'devotional.completed': 'Completed!',
+    'devotional.notFound': 'Devotional not found',
+    'devotional.back': 'Back',
+    'devotional.viewPrevious': 'View previous devotionals',
     
     // Navigation
     'nav.home': 'Today',
@@ -284,6 +315,17 @@ const translations: Record<Language, Record<string, string>> = {
     'routes.title': 'Thematic Routes',
     'routes.subtitle': 'Special devotional plans to deepen your faith.',
     'routes.locked': 'Premium',
+    'routes.days': 'days',
+    
+    // Route titles
+    'route.hope.title': '30 days of hope',
+    'route.hope.description': 'Discover how hope in God can transform your daily perspective and lead you to a purposeful life.',
+    'route.healing.title': '21 days of inner healing',
+    'route.healing.description': 'A path of emotional and spiritual restoration guided by the Word of God.',
+    'route.family.title': '14 days for the family',
+    'route.family.description': 'Strengthen family bonds through devotionals focused on love and unity.',
+    'route.restart.title': '7 days to restart with God',
+    'route.restart.description': 'A week to renew your relationship with God and start fresh with renewed faith.',
     
     // Premium
     'premium.title': 'Devoc365 Premium',

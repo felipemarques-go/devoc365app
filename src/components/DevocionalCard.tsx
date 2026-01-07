@@ -2,7 +2,7 @@ import { BookOpen, CheckCircle2, Flame, Shield, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useApp } from '@/context/AppContext';
 import { useLanguage } from '@/context/LanguageContext';
-import { getDevocionalDelDia } from '@/data/mockData';
+import { getDevocionalDelDia } from '@/data/devocionales365';
 import { getGuidesForDay } from '@/data/guidesContent';
 import { cn } from '@/lib/utils';
 
@@ -10,7 +10,7 @@ export function DevocionalCard() {
   const { devocionalCompletadoHoy, marcarDevocionalCompletado, usuario } = useApp();
   const { language, t } = useLanguage();
   
-  const devocionalHoy = getDevocionalDelDia();
+  const devocionalHoy = getDevocionalDelDia(new Date(), language);
   const guides = getGuidesForDay(new Date(), language);
   
   const formatDate = (date: Date) => {

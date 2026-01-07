@@ -1,9 +1,44 @@
 import { Layout } from '@/components/layout/Layout';
 import { RutaCard } from '@/components/RutaCard';
 import { PremiumBanner } from '@/components/PremiumBanner';
-import { rutasTematicas } from '@/data/mockData';
 import { useApp } from '@/context/AppContext';
 import { useLanguage } from '@/context/LanguageContext';
+
+// Rutas with translation keys
+const rutasTematicasMultilang = [
+  {
+    id: '1',
+    titleKey: 'route.hope.title',
+    descriptionKey: 'route.hope.description',
+    dias: 30,
+    icono: '🌅',
+    premium: false,
+  },
+  {
+    id: '2',
+    titleKey: 'route.healing.title',
+    descriptionKey: 'route.healing.description',
+    dias: 21,
+    icono: '💚',
+    premium: true,
+  },
+  {
+    id: '3',
+    titleKey: 'route.family.title',
+    descriptionKey: 'route.family.description',
+    dias: 14,
+    icono: '👨‍👩‍👧‍👦',
+    premium: true,
+  },
+  {
+    id: '4',
+    titleKey: 'route.restart.title',
+    descriptionKey: 'route.restart.description',
+    dias: 7,
+    icono: '🔄',
+    premium: false,
+  }
+];
 
 const Rutas = () => {
   const { usuario } = useApp();
@@ -23,7 +58,7 @@ const Rutas = () => {
         </div>
 
         <div className="space-y-4">
-          {rutasTematicas.map((ruta, index) => (
+          {rutasTematicasMultilang.map((ruta, index) => (
             <RutaCard key={ruta.id} ruta={ruta} index={index} />
           ))}
         </div>
