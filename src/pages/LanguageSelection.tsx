@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sun, Check } from 'lucide-react';
-import { Language } from '@/context/LanguageContext';
+import { useLanguage, Language } from '@/context/LanguageContext';
 
 const languages = [
   { code: 'en' as Language, name: 'English', flag: '🇺🇸' },
@@ -10,22 +10,31 @@ const languages = [
   { code: 'es' as Language, name: 'Español', flag: '🇪🇸' },
 ];
 
-const selectTexts: Record<Language, { title: string; continue: string }> = {
-  en: { title: 'Select your language', continue: 'Continue' },
-  pt: { title: 'Selecione seu idioma', continue: 'Continuar' },
-  es: { title: 'Selecciona tu idioma', continue: 'Continuar' },
-};
-
 const LanguageSelection = () => {
   const navigate = useNavigate();
+  const { setLanguage, t } = useLanguage();
   const [selectedLang, setSelectedLang] = useState<Language>('es');
 
   const handleContinue = () => {
-    // Save directly to localStorage (same keys used by LanguageContext)
-    localStorage.setItem('devoc365_language', selectedLang);
-    localStorage.setItem('devoc365_language_selected', 'true');
-    // Force page reload so LanguageProvider picks up the new values
-    window.location.href = '/';
+    setLanguage(selectedLang);
+    navigate('/');
+  };
+
+  // Dynamic title based on selected language
+  const getTitle = () => {
+    switch (selectedLang) {
+      case 'en': return 'Select your language';
+      case 'pt': return 'Selecione seu idioma';
+      default: return 'Selecciona tu idioma';
+    }
+  };
+
+  const getContinueText = () => {
+    switch (selectedLang) {
+      case 'en': return 'Continue';
+      case 'pt': return 'Continuar';
+      default: return 'Continuar';
+    }
   };
 
   return (
@@ -48,7 +57,7 @@ const LanguageSelection = () => {
         {/* Language selection */}
         <div className="mb-8">
           <h2 className="font-serif text-xl font-semibold text-foreground mb-6">
-            {selectTexts[selectedLang].title}
+            {getTitle()}
           </h2>
 
           <div className="space-y-3">
@@ -83,7 +92,7 @@ const LanguageSelection = () => {
           size="xl" 
           className="w-full"
         >
-          {selectTexts[selectedLang].continue}
+          {getContinueText()}
         </Button>
       </div>
     </div>
