@@ -1,11 +1,10 @@
 import { Layout } from '@/components/layout/Layout';
 import { HistorialCard } from '@/components/HistorialCard';
 import { PremiumBanner } from '@/components/PremiumBanner';
-import { getHistorialDevocionales, formatFechaEspanol } from '@/data/mockData';
+import { getHistorialDevocionales, formatFecha } from '@/data/devocionales365';
 import { useApp } from '@/context/AppContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { useMemo } from 'react';
-import { formatFecha } from '@/data/devocionales365';
 
 const Historial = () => {
   const { usuario } = useApp();
@@ -16,7 +15,7 @@ const Historial = () => {
   const daysToShow = isGratuito ? 3 : 30;
   const historialDevocionales = useMemo(() => {
     const today = new Date();
-    return getHistorialDevocionales(daysToShow, today).map((dev, index) => {
+    return getHistorialDevocionales(daysToShow, today, language).map((dev, index) => {
       const pastDate = new Date();
       pastDate.setDate(pastDate.getDate() - (index + 1));
       return {

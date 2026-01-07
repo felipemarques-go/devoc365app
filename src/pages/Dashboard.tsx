@@ -4,9 +4,11 @@ import { PremiumBanner } from '@/components/PremiumBanner';
 import { Button } from '@/components/ui/button';
 import { History } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '@/context/LanguageContext';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   return (
     <Layout headerTitle="Devoc365">
@@ -20,7 +22,7 @@ const Dashboard = () => {
             onClick={() => navigate('/historial')}
           >
             <History className="w-4 h-4" />
-            Ver devocionales anteriores
+            {t('devotional.viewPrevious')}
           </Button>
         </div>
 

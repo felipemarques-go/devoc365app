@@ -2,17 +2,20 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
-import { devocionales365, formatFechaEspanol } from '@/data/mockData';
+import { useLanguage } from '@/context/LanguageContext';
+import { devocionales365Multilang, formatFecha } from '@/data/devocionales365';
 import { useMemo } from 'react';
 
 const DevocionalDetalle = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { language, t } = useLanguage();
   
   const devotional = useMemo(() => {
     const devId = parseInt(id || '0', 10);
-    return devocionales365.find(d => d.id === devId);
-  }, [id]);
+    const multilangDev = devocionales365Multilang.find(d => d.id === devId);
+    return multilangDev ? multilangDev[language] : undefined;
+  }, [id, language]);
 
   // Calculate the date for this devotional (going back from today)
   const fecha = useMemo(() => {
@@ -24,16 +27,16 @@ const DevocionalDetalle = () => {
     const daysBack = (todayIndex - (devId - 1) + 365) % 365;
     const pastDate = new Date();
     pastDate.setDate(pastDate.getDate() - daysBack);
-    return formatFechaEspanol(pastDate);
-  }, [devotional, id]);
+    return formatFecha(pastDate, language);
+  }, [devotional, id, language]);
 
   if (!devotional) {
     return (
-      <Layout headerTitle="Devocional">
+      <Layout headerTitle={t('devotional.today')}>
         <div className="p-4 text-center">
-          <p className="text-muted-foreground">Devocional no encontrado</p>
+          <p className="text-muted-foreground">{t('devotional.notFound')}</p>
           <Button onClick={() => navigate(-1)} variant="outline" className="mt-4">
-            Volver
+            {t('devotional.back')}
           </Button>
         </div>
       </Layout>
@@ -41,14 +44,14 @@ const DevocionalDetalle = () => {
   }
 
   return (
-    <Layout headerTitle="Devocional">
+    <Layout headerTitle={t('devotional.today')}>
       <div className="py-4 px-4 animate-fade-in">
         <button 
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-4"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm">Volver</span>
+          <span className="text-sm">{t('devotional.back')}</span>
         </button>
 
         <div className="bg-card rounded-2xl shadow-card border border-border overflow-hidden">
@@ -75,7 +78,7 @@ const DevocionalDetalle = () => {
             {/* Reflexión */}
             <div>
               <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-                Reflexión
+                {t('devotional.reflection')}
               </h3>
               <div className="text-foreground leading-relaxed whitespace-pre-line text-sm">
                 {devotional.reflexion}
@@ -85,7 +88,7 @@ const DevocionalDetalle = () => {
             {/* Oración */}
             <div className="p-4 rounded-xl bg-muted/50">
               <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-                Oración
+                {t('devotional.prayer')}
               </h3>
               <p className="text-foreground leading-relaxed italic text-sm">
                 {devotional.oracion}
