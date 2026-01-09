@@ -1,7 +1,5 @@
 import { Layout } from '@/components/layout/Layout';
 import { RutaCard } from '@/components/RutaCard';
-import { PremiumBanner } from '@/components/PremiumBanner';
-import { useApp } from '@/context/AppContext';
 import { useLanguage } from '@/context/LanguageContext';
 
 // Rutas with translation keys
@@ -20,7 +18,7 @@ const rutasTematicasMultilang = [
     descriptionKey: 'route.healing.description',
     dias: 21,
     icono: '💚',
-    premium: true,
+    premium: false,
   },
   {
     id: '3',
@@ -28,7 +26,7 @@ const rutasTematicasMultilang = [
     descriptionKey: 'route.family.description',
     dias: 14,
     icono: '👨‍👩‍👧‍👦',
-    premium: true,
+    premium: false,
   },
   {
     id: '4',
@@ -41,9 +39,7 @@ const rutasTematicasMultilang = [
 ];
 
 const Rutas = () => {
-  const { usuario } = useApp();
   const { t } = useLanguage();
-  const isGratuito = usuario.tipoAcceso === 'gratuito';
 
   return (
     <Layout headerTitle={t('routes.title')}>
@@ -62,12 +58,6 @@ const Rutas = () => {
             <RutaCard key={ruta.id} ruta={ruta} index={index} />
           ))}
         </div>
-
-        {isGratuito && (
-          <div className="pt-4">
-            <PremiumBanner />
-          </div>
-        )}
       </div>
     </Layout>
   );
