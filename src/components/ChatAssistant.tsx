@@ -3,6 +3,7 @@ import { MessageCircle, X, Send, Loader2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -11,19 +12,69 @@ interface Message {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-assistant`;
 
+// Initial messages and UI text by language
+const uiTexts = {
+  es: {
+    initialMessage: '¡Hola! Soy la Asistente Devoc365. Estoy aquí para ayudarte con cualquier duda sobre la app o tu vida devocional. ¿En qué puedo ayudarte hoy?',
+    title: 'Asistente Devoc365',
+    subtitle: 'Tu guía espiritual virtual',
+    placeholder: 'Escribe tu pregunta...',
+    tooLong: 'Tu mensaje es demasiado largo. El máximo permitido es',
+    characters: 'caracteres',
+    errorConnection: 'Lo siento, hubo un error al procesar tu mensaje. Por favor, intenta de nuevo.',
+    quickAction1: '¿Cómo uso la app?',
+    quickAction2: '¿Qué contenido hay?',
+    quickAction3: 'Consejos para orar',
+  },
+  pt: {
+    initialMessage: 'Olá! Sou a Assistente Devoc365. Estou aqui para ajudá-lo com qualquer dúvida sobre o app ou sua vida devocional. Como posso ajudá-lo hoje?',
+    title: 'Assistente Devoc365',
+    subtitle: 'Seu guia espiritual virtual',
+    placeholder: 'Escreva sua pergunta...',
+    tooLong: 'Sua mensagem é muito longa. O máximo permitido é',
+    characters: 'caracteres',
+    errorConnection: 'Desculpe, houve um erro ao processar sua mensagem. Por favor, tente novamente.',
+    quickAction1: 'Como uso o app?',
+    quickAction2: 'Qual conteúdo tem?',
+    quickAction3: 'Dicas para orar',
+  },
+  en: {
+    initialMessage: "Hi! I'm the Devoc365 Assistant. I'm here to help you with any questions about the app or your devotional life. How can I help you today?",
+    title: 'Devoc365 Assistant',
+    subtitle: 'Your virtual spiritual guide',
+    placeholder: 'Type your question...',
+    tooLong: 'Your message is too long. The maximum allowed is',
+    characters: 'characters',
+    errorConnection: 'Sorry, there was an error processing your message. Please try again.',
+    quickAction1: 'How do I use the app?',
+    quickAction2: 'What content is available?',
+    quickAction3: 'Prayer tips',
+  },
+};
+
 export function ChatAssistant() {
   const { session, user } = useAuth();
+  const { language } = useLanguage();
+  const texts = uiTexts[language] || uiTexts.es;
+  
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: '¡Hola! Soy la Asistente Devoc365. Estoy aquí para ayudarte con cualquier duda sobre la app o tu vida devocional. ¿En qué puedo ayudarte hoy?'
+      content: texts.initialMessage
     }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Update initial message when language changes
+  useEffect(() => {
+    if (messages.length === 1 && messages[0].role === 'assistant') {
+      setMessages([{ role: 'assistant', content: texts.initialMessage }]);
+    }
+  }, [language, texts.initialMessage]);
 
   // Only show chat assistant if user is authenticated
   if (!user || !session) {
@@ -56,7 +107,7 @@ export function ChatAssistant() {
     if (trimmedInput.length > MAX_MESSAGE_LENGTH) {
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: `Tu mensaje es demasiado largo. El máximo permitido es ${MAX_MESSAGE_LENGTH} caracteres.` 
+        content: `${texts.tooLong} ${MAX_MESSAGE_LENGTH} ${texts.characters}.` 
       }]);
       return;
     }
@@ -91,12 +142,12 @@ export function ChatAssistant() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({ messages: recentMessages }),
+        body: JSON.stringify({ messages: recentMessages, language }),
       });
 
       if (!resp.ok || !resp.body) {
-        const error = await resp.json().catch(() => ({ error: 'Error de conexión' }));
-        throw new Error(error.error || 'Error al enviar mensaje');
+        const error = await resp.json().catch(() => ({ error: texts.errorConnection }));
+        throw new Error(error.error || texts.errorConnection);
       }
 
       const reader = resp.body.getReader();
@@ -152,12 +203,10 @@ export function ChatAssistant() {
         }
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+      const errorMessage = error instanceof Error ? error.message : texts.errorConnection;
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: errorMessage.includes('Límite') 
-          ? errorMessage 
-          : 'Lo siento, hubo un error al procesar tu mensaje. Por favor, intenta de nuevo.' 
+        content: errorMessage 
       }]);
     } finally {
       setIsLoading(false);
@@ -181,7 +230,7 @@ export function ChatAssistant() {
           "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground",
           isOpen && "scale-0 opacity-0"
         )}
-        aria-label="Abrir asistente"
+        aria-label="Open assistant"
       >
         <MessageCircle className="w-6 h-6" />
         <span className="absolute -top-1 -right-1 w-4 h-4 bg-accent rounded-full flex items-center justify-center">
@@ -215,14 +264,14 @@ export function ChatAssistant() {
                 <Sparkles className="w-5 h-5 text-primary-foreground" />
               </div>
               <div>
-                <h3 className="font-semibold text-foreground">Asistente Devoc365</h3>
-                <p className="text-xs text-muted-foreground">Tu guía espiritual virtual</p>
+                <h3 className="font-semibold text-foreground">{texts.title}</h3>
+                <p className="text-xs text-muted-foreground">{texts.subtitle}</p>
               </div>
             </div>
             <button
               onClick={() => setIsOpen(false)}
               className="p-2 hover:bg-muted rounded-full transition-colors"
-              aria-label="Cerrar chat"
+              aria-label="Close chat"
             >
               <X className="w-5 h-5 text-muted-foreground" />
             </button>
@@ -263,22 +312,22 @@ export function ChatAssistant() {
           {/* Quick actions */}
           <div className="px-4 py-2 flex gap-2 flex-wrap border-t border-border/50">
             <button 
-              onClick={() => setInput('¿Cómo uso la app?')}
+              onClick={() => setInput(texts.quickAction1)}
               className="text-xs px-3 py-1.5 bg-muted hover:bg-muted/80 rounded-full text-muted-foreground transition-colors"
             >
-              ¿Cómo uso la app?
+              {texts.quickAction1}
             </button>
             <button 
-              onClick={() => setInput('¿Qué incluye Premium?')}
+              onClick={() => setInput(texts.quickAction2)}
               className="text-xs px-3 py-1.5 bg-muted hover:bg-muted/80 rounded-full text-muted-foreground transition-colors"
             >
-              ¿Qué incluye Premium?
+              {texts.quickAction2}
             </button>
             <button 
-              onClick={() => setInput('Dame un consejo para orar')}
+              onClick={() => setInput(texts.quickAction3)}
               className="text-xs px-3 py-1.5 bg-muted hover:bg-muted/80 rounded-full text-muted-foreground transition-colors"
             >
-              Consejos para orar
+              {texts.quickAction3}
             </button>
           </div>
 
@@ -291,7 +340,7 @@ export function ChatAssistant() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Escribe tu pregunta..."
+                placeholder={texts.placeholder}
                 className="flex-1 bg-muted rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground placeholder:text-muted-foreground"
                 disabled={isLoading}
               />
