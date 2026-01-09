@@ -1,33 +1,73 @@
-import { Sun, Sparkles } from 'lucide-react';
-import { HOTMART_PREMIUM_URL } from '@/data/mockData';
+import { useLanguage } from '@/context/LanguageContext';
+import logo from '@/assets/logo.png';
 
 interface HeaderProps {
   title?: string;
-  showPremium?: boolean;
 }
 
-export function Header({ title = 'Devoc365', showPremium = true }: HeaderProps) {
+// Daily motivational phrases by language (rotated by day of year)
+const dailyPhrases: Record<string, string[]> = {
+  es: [
+    'Dios te ama hoy',
+    'Camina en fe',
+    'Eres bendecido(a)',
+    'Su gracia te basta',
+    'Confía en Él siempre',
+    'Paz en tu corazón',
+    'Él nunca te abandona',
+    'Nueva misericordia hoy',
+    'Eres luz del mundo',
+    'Su amor es eterno',
+  ],
+  pt: [
+    'Deus te ama hoje',
+    'Caminhe pela fé',
+    'Você é abençoado(a)',
+    'Sua graça te basta',
+    'Confie Nele sempre',
+    'Paz no seu coração',
+    'Ele nunca te abandona',
+    'Nova misericórdia hoje',
+    'Você é luz do mundo',
+    'Seu amor é eterno',
+  ],
+  en: [
+    'God loves you today',
+    'Walk by faith',
+    'You are blessed',
+    'His grace is enough',
+    'Trust in Him always',
+    'Peace in your heart',
+    'He never leaves you',
+    'New mercy today',
+    'You are the light',
+    'His love is eternal',
+  ],
+};
+
+function getDailyPhrase(language: string): string {
+  const dayOfYear = Math.floor(
+    (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
+  );
+  const phrases = dailyPhrases[language] || dailyPhrases.es;
+  return phrases[dayOfYear % phrases.length];
+}
+
+export function Header({ title = 'Devoc365' }: HeaderProps) {
+  const { language } = useLanguage();
+  const dailyPhrase = getDailyPhrase(language);
+
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border px-4 py-3">
       <div className="flex items-center justify-between max-w-lg mx-auto">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full gradient-spiritual flex items-center justify-center">
-            <Sun className="w-5 h-5 text-primary-foreground" />
-          </div>
+          <img src={logo} alt="Devoc365" className="w-8 h-8 rounded-full object-cover" />
           <span className="font-serif font-semibold text-lg text-foreground">{title}</span>
         </div>
         
-        {showPremium && (
-          <a 
-            href={HOTMART_PREMIUM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-xs font-medium text-accent hover:text-accent/80 transition-colors"
-          >
-            <Sparkles className="w-4 h-4" />
-            <span className="hidden sm:inline">Premium</span>
-          </a>
-        )}
+        <span className="text-xs font-medium text-accent italic">
+          {dailyPhrase}
+        </span>
       </div>
     </header>
   );

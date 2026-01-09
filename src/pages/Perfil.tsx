@@ -3,8 +3,7 @@ import { Button } from '@/components/ui/button';
 import { useApp } from '@/context/AppContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useLanguage } from '@/context/LanguageContext';
-import { HOTMART_PREMIUM_URL } from '@/data/mockData';
-import { User, Flame, Target, Trophy, Sparkles, ExternalLink, LogOut } from 'lucide-react';
+import { User, Flame, Target, Trophy, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -49,23 +48,6 @@ const Perfil = () => {
             {t('profile.hello')} {usuario.nombre || 'Usuario'}!
           </h1>
           <p className="text-sm text-muted-foreground mt-1">{usuario.email}</p>
-          
-          {usuario.tipoAcceso === 'premium' ? (
-            <span className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full bg-accent/20 text-accent text-sm font-medium">
-              <Sparkles className="w-4 h-4" />
-              {t('profile.premiumActive')}
-            </span>
-          ) : (
-            <Button 
-              variant="premium" 
-              size="sm" 
-              className="mt-3"
-              onClick={() => window.open(HOTMART_PREMIUM_URL, '_blank')}
-            >
-              <Sparkles className="w-4 h-4" />
-              {t('profile.upgradePremium')}
-            </Button>
-          )}
         </div>
 
         {/* Stats */}
@@ -120,16 +102,6 @@ const Perfil = () => {
             </div>
           </div>
         </div>
-
-        {/* Subscription link */}
-        <Button 
-          variant="outline" 
-          className="w-full"
-          onClick={() => window.open(HOTMART_PREMIUM_URL, '_blank')}
-        >
-          <ExternalLink className="w-4 h-4" />
-          {t('profile.manageSubscription')}
-        </Button>
 
         {/* Sign out */}
         <Button 
