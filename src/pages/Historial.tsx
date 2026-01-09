@@ -1,18 +1,14 @@
 import { Layout } from '@/components/layout/Layout';
 import { HistorialCard } from '@/components/HistorialCard';
-import { PremiumBanner } from '@/components/PremiumBanner';
 import { getHistorialDevocionales, formatFecha } from '@/data/devocionales365';
-import { useApp } from '@/context/AppContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { useMemo } from 'react';
 
 const Historial = () => {
-  const { usuario } = useApp();
   const { t, language } = useLanguage();
-  const isGratuito = usuario.tipoAcceso === 'gratuito';
   
-  // Get past devotionals based on access type
-  const daysToShow = isGratuito ? 3 : 30;
+  // Show full 30 days for all users
+  const daysToShow = 30;
   const historialDevocionales = useMemo(() => {
     const today = new Date();
     return getHistorialDevocionales(daysToShow, today, language).map((dev, index) => {
@@ -33,9 +29,7 @@ const Historial = () => {
             {t('history.subtitle')}
           </h1>
           <p className="text-sm text-muted-foreground">
-            {isGratuito 
-              ? t('history.limitedAccess')
-              : t('history.fullAccess')}
+            {t('history.fullAccess')}
           </p>
         </div>
 
@@ -48,12 +42,6 @@ const Historial = () => {
             />
           ))}
         </div>
-
-        {isGratuito && (
-          <div className="pt-4">
-            <PremiumBanner variant="compact" />
-          </div>
-        )}
       </div>
     </Layout>
   );

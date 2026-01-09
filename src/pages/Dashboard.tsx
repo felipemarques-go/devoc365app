@@ -1,6 +1,5 @@
 import { Layout } from '@/components/layout/Layout';
 import { DevocionalCard } from '@/components/DevocionalCard';
-import { PremiumBanner } from '@/components/PremiumBanner';
 import { Button } from '@/components/ui/button';
 import { History } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -25,8 +24,6 @@ const Dashboard = () => {
             {t('devotional.viewPrevious')}
           </Button>
         </div>
-
-        <PremiumBanner />
       </div>
     </Layout>
   );

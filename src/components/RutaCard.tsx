@@ -1,6 +1,5 @@
-import { ChevronRight, Lock } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useApp } from '@/context/AppContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { cn } from '@/lib/utils';
 
@@ -20,25 +19,18 @@ interface RutaCardProps {
 
 export function RutaCard({ ruta, index }: RutaCardProps) {
   const navigate = useNavigate();
-  const { usuario } = useApp();
   const { t } = useLanguage();
-  
-  const isLocked = ruta.premium && usuario.tipoAcceso === 'gratuito';
 
   const handleClick = () => {
-    if (!isLocked) {
-      navigate(`/ruta/${ruta.id}`);
-    }
+    navigate(`/ruta/${ruta.id}`);
   };
 
   return (
     <button
       onClick={handleClick}
-      disabled={isLocked}
       className={cn(
         "w-full text-left p-5 rounded-2xl bg-card border border-border shadow-card transition-all duration-200 animate-fade-in",
-        !isLocked && "hover:shadow-soft hover:border-primary/20 active:scale-[0.99]",
-        isLocked && "opacity-75"
+        "hover:shadow-soft hover:border-primary/20 active:scale-[0.99]"
       )}
       style={{ animationDelay: `${index * 100}ms` }}
     >
@@ -49,7 +41,6 @@ export function RutaCard({ ruta, index }: RutaCardProps) {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <h3 className="font-serif font-semibold text-foreground">{t(ruta.titleKey)}</h3>
-            {isLocked && <Lock className="w-4 h-4 text-accent" />}
           </div>
           <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
             {t(ruta.descriptionKey)}
