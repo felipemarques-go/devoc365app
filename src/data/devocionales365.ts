@@ -31,13 +31,19 @@ export function getDevocionalDelDia(date: Date = new Date(), language: 'es' | 'p
   return devocionales365Multilang[index][language];
 }
 
-// Helper function to get past devotionals for history
+// Helper function to get past devotionals for history (starting from 01/01/2026)
 export function getHistorialDevocionales(daysBack: number = 30, fromDate: Date = new Date(), language: 'es' | 'pt' | 'en' = 'es'): Devocional365[] {
   const result: Devocional365[] = [];
+  const startDate = new Date(2026, 0, 1); // January 1, 2026
+  
   for (let i = 1; i <= daysBack; i++) {
     const pastDate = new Date(fromDate);
     pastDate.setDate(pastDate.getDate() - i);
-    result.push(getDevocionalDelDia(pastDate, language));
+    
+    // Only include dates from 01/01/2026 onwards
+    if (pastDate >= startDate) {
+      result.push(getDevocionalDelDia(pastDate, language));
+    }
   }
   return result;
 }
