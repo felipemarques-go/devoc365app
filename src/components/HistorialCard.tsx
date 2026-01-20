@@ -1,8 +1,6 @@
-import { ChevronRight, Lock } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Devocional365 } from '@/data/devocionales365';
-import { useApp } from '@/context/AppContext';
-import { cn } from '@/lib/utils';
 
 interface HistorialDevocional extends Devocional365 {
   fecha: string;
@@ -14,28 +12,17 @@ interface HistorialCardProps {
   locked?: boolean;
 }
 
-export function HistorialCard({ devotional, index, locked = false }: HistorialCardProps) {
+export function HistorialCard({ devotional, index }: Omit<HistorialCardProps, 'locked'>) {
   const navigate = useNavigate();
-  const { usuario } = useApp();
-  
-  // Free users only see first 3
-  const isLocked = locked || (usuario.tipoAcceso === 'gratuito' && index >= 3);
 
   const handleClick = () => {
-    if (!isLocked) {
-      navigate(`/devocional/${devotional.id}`);
-    }
+    navigate(`/devocional/${devotional.id}`);
   };
 
   return (
     <button
       onClick={handleClick}
-      disabled={isLocked}
-      className={cn(
-        "w-full text-left p-4 rounded-xl bg-card border border-border shadow-card transition-all duration-200 animate-fade-in",
-        !isLocked && "hover:shadow-soft hover:border-primary/20 active:scale-[0.99]",
-        isLocked && "opacity-60"
-      )}
+      className="w-full text-left p-4 rounded-xl bg-card border border-border shadow-card transition-all duration-200 animate-fade-in hover:shadow-soft hover:border-primary/20 active:scale-[0.99]"
       style={{ animationDelay: `${index * 100}ms` }}
     >
       <div className="flex items-center justify-between gap-3">
@@ -46,11 +33,7 @@ export function HistorialCard({ devotional, index, locked = false }: HistorialCa
             {devotional.cita}
           </p>
         </div>
-        {isLocked ? (
-          <Lock className="w-5 h-5 text-muted-foreground flex-shrink-0" />
-        ) : (
-          <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
-        )}
+        <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
       </div>
     </button>
   );
